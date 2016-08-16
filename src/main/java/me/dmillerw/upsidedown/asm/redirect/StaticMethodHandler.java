@@ -14,22 +14,20 @@ public class StaticMethodHandler {
 
     public static float getSunBrightness(World world, float f) {
         if (ClientProxy.inUpsideDown) {
-            return world.provider.getSunBrightness(f) / 2;
+            return world.provider.getSunBrightness(f) * ClientProxy.atmosphericState.lightingIntensity;
+//            return world.provider.getSunBrightness(f) / 2;
         } else {
             return world.provider.getSunBrightness(f);
         }
     }
 
     public static int modifyLightmap(int color, int position, int originalValue) {
-        if (ClientProxy.lightR == -1 || ClientProxy.lightG == -1 || ClientProxy.lightB == -1)
-            return originalValue;
-
         if (ClientProxy.inUpsideDown) {
             switch (color) {
-                case 2: return (int)((float)originalValue * ClientProxy.lightB);
-                case 1: return (int)((float)originalValue * ClientProxy.lightG);
-                case 0:
-                default: return (int)((float)originalValue * ClientProxy.lightR);
+                case 2: return (int)((float)originalValue * ClientProxy.atmosphericState.lightingRed);
+                case 1: return (int)((float)originalValue * ClientProxy.atmosphericState.lightingGreen);
+                case 0: return (int)((float)originalValue * ClientProxy.atmosphericState.lightingBlue);
+                default: return originalValue;
             }
         } else {
             return originalValue;

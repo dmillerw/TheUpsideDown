@@ -1,6 +1,7 @@
 package me.dmillerw.upsidedown.proxy;
 
 import com.google.common.collect.Sets;
+import me.dmillerw.upsidedown.client.state.AtmosphericState;
 import me.dmillerw.upsidedown.event.client.RenderEventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -24,13 +25,8 @@ public class ClientProxy extends CommonProxy {
     // List of all Player's in the same state as this player, set on each sync
     public static Set<UUID> playersSharingState = Sets.newHashSet();
 
-    // Color state
-    public static float lightR = -1;
-    public static float lightG = -1;
-    public static float lightB = -1;
-    public static float fogR = -1;
-    public static float fogG = -1;
-    public static float fogB = -1;
+    // Client state management
+    public static AtmosphericState atmosphericState = new AtmosphericState();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
