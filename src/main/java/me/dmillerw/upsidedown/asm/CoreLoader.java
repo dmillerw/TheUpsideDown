@@ -11,7 +11,7 @@ public class CoreLoader implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] {"me.dmillerw.upsidedown.asm.CoreLoader"};
+        return new String[] {"me.dmillerw.upsidedown.asm.transform.CoreTransformer"};
     }
 
     @Override
