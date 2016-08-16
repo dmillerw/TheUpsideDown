@@ -1,5 +1,6 @@
 package me.dmillerw.upsidedown.event.client;
 
+import me.dmillerw.upsidedown.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
@@ -9,6 +10,8 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Created by dmillerw
@@ -72,4 +75,27 @@ public class RenderEventHandler {
             GlStateManager.enableAlpha();
         }
     };
+
+    @SubscribeEvent
+    public void fogDensity(EntityViewRenderEvent.FogDensity event) {
+        if (ClientProxy.inUpsideDown) {
+            GlStateManager.setFog(GlStateManager.FogMode.EXP);
+            event.setDensity(0.01F);
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void fogColor(EntityViewRenderEvent.FogColors event) {
+        if (ClientProxy.fogR == -1 || ClientProxy.fogG == -1 || ClientProxy.fogB == -1)
+            return;
+
+        event.setRed(ClientProxy.fogR);
+        event.setGreen(ClientProxy.fogG);
+        event.setBlue(ClientProxy.fogB);
+
+//        event.setRed(0.71F);
+//        event.setGreen(0.71F);
+//        event.setBlue(0.85F);
+    }
 }

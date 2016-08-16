@@ -2,7 +2,11 @@ package me.dmillerw.upsidedown.proxy;
 
 import com.google.common.collect.Sets;
 import me.dmillerw.upsidedown.event.client.RenderEventHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -20,9 +24,19 @@ public class ClientProxy extends CommonProxy {
     // List of all Player's in the same state as this player, set on each sync
     public static Set<UUID> playersSharingState = Sets.newHashSet();
 
+    // Color state
+    public static float lightR = -1;
+    public static float lightG = -1;
+    public static float lightB = -1;
+    public static float fogR = -1;
+    public static float fogG = -1;
+    public static float fogB = -1;
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+
+        MinecraftForge.EVENT_BUS.register(new RenderEventHandler());
     }
 
     @Override
@@ -40,9 +54,15 @@ public class ClientProxy extends CommonProxy {
         super.onStateChanged(player, state);
 
         if (state) {
-            player.worldObj.provider.setSkyRenderer(RenderEventHandler.ENDER_SKY_RENDERER);
+            player.worldObj.provider.setCloudRenderer(new IRenderHandler() {
+                @Override
+                public void render(float partialTicks, WorldClient world, Minecraft mc) {
+
+                }
+            });
         } else {
             player.worldObj.provider.setSkyRenderer(null);
+            player.worldObj.provider.setCloudRenderer(null);
         }
     }
 }

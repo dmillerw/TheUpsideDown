@@ -13,6 +13,7 @@ public class CoreTransformer implements IClassTransformer {
     private static List<ITransformer> transformers = Lists.newArrayList();
     static {
         transformers.add(new TransformWorld());
+        transformers.add(new TransformEntityRenderer());
     }
 
     @Override
