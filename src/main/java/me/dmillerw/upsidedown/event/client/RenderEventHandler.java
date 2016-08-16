@@ -50,7 +50,7 @@ public class RenderEventHandler {
             final int MAX_PARTICLES = 1000;
 
             if (ParticleSpeck.count < MAX_PARTICLES) {
-                for (int i=0; i<world.rand.nextInt(50); i++) {
+                for (int i=0; i<200; i++) {
                     int x = (int)player.posX + (world.rand.nextBoolean() ? world.rand.nextInt(16) : -world.rand.nextInt(16));
                     int y = (int)player.posY + (world.rand.nextBoolean() ? world.rand.nextInt(16) : -world.rand.nextInt(16));
                     int z = (int)player.posZ + (world.rand.nextBoolean() ? world.rand.nextInt(16) : -world.rand.nextInt(16));

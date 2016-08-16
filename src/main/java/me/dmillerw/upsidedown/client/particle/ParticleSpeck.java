@@ -1,6 +1,7 @@
 package me.dmillerw.upsidedown.client.particle;
 
 import me.dmillerw.upsidedown.lib.ModInfo;
+import me.dmillerw.upsidedown.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -35,7 +36,7 @@ public class ParticleSpeck extends Particle {
         this.particleGreen = 1.0F;
         this.particleBlue = 1.0F;
         this.setParticleTextureIndex(32);
-        this.setSize(0.02F, 0.02F);
+        this.setSize(0.01F, 0.01F);
 
         this.particleMaxAge = (int) (32.0D / (Math.random() * 0.8D + 0.2D));
 
@@ -48,6 +49,11 @@ public class ParticleSpeck extends Particle {
     @Override
     public void onUpdate() {
         super.onUpdate();
+
+        if (!ClientProxy.inUpsideDown) {
+            setExpired();
+            return;
+        }
 
         if (!isAlive()) {
             ParticleSpeck.count--;
