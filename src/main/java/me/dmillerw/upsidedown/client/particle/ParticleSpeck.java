@@ -27,6 +27,10 @@ public class ParticleSpeck extends Particle {
 
         ParticleSpeck.count++;
 
+        this.motionX = xSpeed;
+        this.motionY = ySpeed;
+        this.motionZ = zSpeed;
+
         this.particleRed = 1.0F;
         this.particleGreen = 1.0F;
         this.particleBlue = 1.0F;
@@ -55,6 +59,11 @@ public class ParticleSpeck extends Particle {
         } else {
             particleAlpha = 1F - ((float) (particleAge - ageMid) / ageMid);
         }
+    }
+
+    @Override
+    public int getBrightnessForRender(float partialTicks) {
+        return Integer.MAX_VALUE;
     }
 
     @Override
