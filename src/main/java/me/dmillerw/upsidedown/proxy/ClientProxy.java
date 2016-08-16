@@ -42,7 +42,7 @@ public class ClientProxy extends CommonProxy {
         if (state) {
             player.worldObj.provider.setSkyRenderer(RenderEventHandler.ENDER_SKY_RENDERER);
         } else {
-            player.worldObj.provider.setCloudRenderer(null);
+            player.worldObj.provider.setSkyRenderer(null);
         }
     }
 }
