@@ -105,6 +105,9 @@ public class RenderEventHandler {
         if (event.phase != TickEvent.Phase.START)
             return;
 
+        if (!ClientProxy.inUpsideDown)
+            return;
+
         Minecraft mc = Minecraft.getMinecraft();
         World world = mc.theWorld;
         EntityPlayer player = mc.thePlayer;
