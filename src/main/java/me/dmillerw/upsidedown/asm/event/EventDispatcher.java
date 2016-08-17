@@ -19,16 +19,4 @@ public class EventDispatcher {
         MinecraftForge.EVENT_BUS.post(event);
         return event;
     }
-
-    private static void test() {
-        int a = 1;
-        int b = 2;
-        int v = 3;
-        int d = 4;
-
-        UpdateLightmapEvent event = updateLightmap(a, b, v, d);
-
-        a = event.getRed();
-        b = event.getGreen();
-    }
 }
