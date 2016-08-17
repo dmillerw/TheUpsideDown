@@ -1,18 +1,16 @@
 package me.dmillerw.upsidedown.asm.transform;
 
-import me.dmillerw.upsidedown.asm.util.MappingDatabase;
+import me.dmillerw.upsidedown.asm.util.Mappings;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.*;
 
 import java.util.Iterator;
 
-import static org.objectweb.asm.Opcodes.*;
-
 /**
  * Created by dmillerw
  */
-public class TransformEntityRenderer implements ITransformer {
+public class TransformEntityRenderer extends BaseTransformer {
 
     @Override
     public String[] getClasses() {
@@ -29,7 +27,7 @@ public class TransformEntityRenderer implements ITransformer {
 
         MethodNode updateLightmap = null;
         for (MethodNode node : classNode.methods) {
-            if (node.name.equals(MappingDatabase.getMethod("updateLightmap"))) {
+            if (node.name.equals(Mappings.getMethod("func_78472_g"))) {
                 updateLightmap = node;
                 break;
             }

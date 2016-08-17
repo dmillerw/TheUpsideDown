@@ -64,7 +64,7 @@ public class ParticleSpeck extends Particle {
         if (particleAge <= ageMid) {
             particleAlpha = (float) particleAge / ageMid;
         } else {
-            particleAlpha = 1F - ((float) (particleAge - ageMid) / ageMid);
+            particleAlpha = 1F - ((particleAge - ageMid) / ageMid);
         }
     }
 

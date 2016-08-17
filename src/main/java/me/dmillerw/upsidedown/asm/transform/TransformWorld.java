@@ -1,19 +1,17 @@
 package me.dmillerw.upsidedown.asm.transform;
 
 import me.dmillerw.upsidedown.asm.util.ASMUtils;
-import me.dmillerw.upsidedown.asm.util.MappingDatabase;
+import me.dmillerw.upsidedown.asm.util.Mappings;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.*;
 
 import java.util.Iterator;
 
-import static org.objectweb.asm.Opcodes.*;
-
 /**
  * Created by dmillerw
  */
-public class TransformWorld implements ITransformer {
+public class TransformWorld extends BaseTransformer {
 
     @Override
     public String[] getClasses() {
@@ -30,7 +28,7 @@ public class TransformWorld implements ITransformer {
 
         MethodNode target = null;
         for (MethodNode methodNode : classNode.methods) {
-            if (methodNode.name.equals(MappingDatabase.getMethod("getSunBrightness"))) {
+            if (methodNode.name.equals(Mappings.getMethod("func_72971_b"))) {
                 target = methodNode;
             }
         }
@@ -63,7 +61,7 @@ public class TransformWorld implements ITransformer {
                         INVOKESTATIC,
                         "me/dmillerw/upsidedown/asm/event/EventDispatcher",
                         "getSunBrightness",
-                        ASMUtils.buildDescription(MappingDatabase.getClass("net/minecraft/world/World"), "F", "F", "F"),
+                        ASMUtils.buildDescription(Mappings.getClass("net/minecraft/world/World"), "F", "F", "F"),
                         false
                 ));
                 target.instructions.insert(insertionTargetMethod, list);

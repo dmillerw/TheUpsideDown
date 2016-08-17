@@ -68,10 +68,10 @@ public class RenderEventHandler {
         World world = mc.theWorld;
         EntityPlayer player = mc.thePlayer;
         if (world != null) {
-            final int MAX_PARTICLES = 1000;
+            final int MAX_PARTICLES = 500;
 
             if (ParticleSpeck.count < MAX_PARTICLES) {
-                for (int i=0; i<200; i++) {
+                for (int i=0; i<100; i++) {
                     int x = (int)player.posX + (world.rand.nextBoolean() ? world.rand.nextInt(8) : -world.rand.nextInt(8));
                     int y = (int)player.posY + (world.rand.nextBoolean() ? world.rand.nextInt(4) : -world.rand.nextInt(4));
                     int z = (int)player.posZ + (world.rand.nextBoolean() ? world.rand.nextInt(8) : -world.rand.nextInt(8));

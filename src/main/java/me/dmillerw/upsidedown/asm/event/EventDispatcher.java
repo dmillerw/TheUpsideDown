@@ -1,5 +1,8 @@
 package me.dmillerw.upsidedown.asm.event;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.BlockModelShapes;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -18,5 +21,11 @@ public class EventDispatcher {
         UpdateLightmapEvent event = new UpdateLightmapEvent(position, red, green, blue);
         MinecraftForge.EVENT_BUS.post(event);
         return event;
+    }
+
+    public static IBakedModel getBlockModel(BlockModelShapes blockModelShapes, IBlockState state, IBakedModel model) {
+        GetBlockModelEvent event = new GetBlockModelEvent(blockModelShapes, state, model);
+        MinecraftForge.EVENT_BUS.post(event);
+        return event.getBlockModel();
     }
 }
