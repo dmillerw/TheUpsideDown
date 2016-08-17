@@ -7,6 +7,7 @@ import java.util.Map;
 /**
  * Created by dmillerw
  */
+@IFMLLoadingPlugin.SortingIndex(1001)
 public class CoreLoader implements IFMLLoadingPlugin {
 
     public static boolean obfuscated = true;
