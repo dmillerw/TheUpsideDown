@@ -9,6 +9,8 @@ import java.util.Map;
  */
 public class CoreLoader implements IFMLLoadingPlugin {
 
+    public static boolean obfuscated = true;
+
     @Override
     public String[] getASMTransformerClass() {
         return new String[] {"me.dmillerw.upsidedown.asm.transform.CoreTransformer"};
@@ -26,7 +28,7 @@ public class CoreLoader implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-
+        CoreLoader.obfuscated = (Boolean) data.get("runtimeDeobfuscationEnabled");
     }
 
     @Override

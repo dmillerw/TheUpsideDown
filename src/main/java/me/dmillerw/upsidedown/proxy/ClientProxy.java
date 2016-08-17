@@ -1,8 +1,8 @@
 package me.dmillerw.upsidedown.proxy;
 
 import com.google.common.collect.Sets;
+import me.dmillerw.upsidedown.client.event.RenderEventHandler;
 import me.dmillerw.upsidedown.client.state.AtmosphericState;
-import me.dmillerw.upsidedown.event.client.RenderEventHandler;
 import me.dmillerw.upsidedown.lib.ModInfo;
 import me.dmillerw.upsidedown.lib.SkyRenderers;
 import net.minecraft.client.Minecraft;

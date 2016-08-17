@@ -1,6 +1,6 @@
 package me.dmillerw.upsidedown.proxy;
 
-import me.dmillerw.upsidedown.event.server.NetworkEventHandler;
+import me.dmillerw.upsidedown.event.NetworkEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

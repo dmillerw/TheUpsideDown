@@ -1,8 +1,8 @@
-package me.dmillerw.upsidedown.event.server;
+package me.dmillerw.upsidedown.event;
 
-import me.dmillerw.upsidedown.util.StateHelper;
 import me.dmillerw.upsidedown.network.PacketHandler;
 import me.dmillerw.upsidedown.network.client.C01StateUpdate;
+import me.dmillerw.upsidedown.util.StateHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;

@@ -1,8 +1,11 @@
 package me.dmillerw.upsidedown.asm.transform;
 
+import me.dmillerw.upsidedown.asm.util.MappingDatabase;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.*;
+
+import java.util.Iterator;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -22,84 +25,78 @@ public class TransformEntityRenderer implements ITransformer {
         ClassReader classReader = new ClassReader(data);
         classReader.accept(classNode, 0);
 
+        CoreTransformer.info("Found EntityRenderer.class, starting to patch");
+
         MethodNode updateLightmap = null;
         for (MethodNode node : classNode.methods) {
-            if (node.name.equals("updateLightmap")) {
+            if (node.name.equals(MappingDatabase.getMethod("updateLightmap"))) {
                 updateLightmap = node;
                 break;
             }
         }
 
         if (updateLightmap != null) {
+            CoreTransformer.info("Found updateLightmap method. Inserting method calls");
+
             boolean insertedHook = false;
-            for (int i = 0; i < updateLightmap.instructions.size(); i++) {
-                AbstractInsnNode an = updateLightmap.instructions.get(i);
-                if (an instanceof VarInsnNode && !insertedHook) {
-                    VarInsnNode iin = (VarInsnNode) an;
-                    if (iin.getOpcode() == ISTORE && iin.var == 22) {
+
+            Iterator<AbstractInsnNode> iterator = updateLightmap.instructions.iterator();
+            while (iterator.hasNext()) {
+                AbstractInsnNode node = iterator.next();
+
+                if (node instanceof VarInsnNode && !insertedHook) {
+                    if (node.getOpcode() == ISTORE && ((VarInsnNode) node).var == 22) {
                         InsnList list = new InsnList();
 
-                        /* RED */
-//                        list.add(new FieldInsnNode(
-//                                GETSTATIC,
-//                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor",
-//                                "RED",
-//                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor"
-//                        ));
-                        list.add(new InsnNode(ICONST_0));
                         list.add(new VarInsnNode(ILOAD, 5));
                         list.add(new VarInsnNode(ILOAD, 20));
+                        list.add(new VarInsnNode(ILOAD, 21));
+                        list.add(new VarInsnNode(ILOAD, 22));
+
                         list.add(new MethodInsnNode(
                                 INVOKESTATIC,
-                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler",
-                                "modifyLightmap",
-//                                "(Lme/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor;II)I",
-                                "(III)I",
+                                "me/dmillerw/upsidedown/asm/event/EventDispatcher",
+                                "updateLightmap",
+                                "(IIII)Lme/dmillerw/upsidedown/asm/event/UpdateLightmapEvent;",
+                                false
+                        ));
+
+                        list.add(new VarInsnNode(ASTORE, 23));
+
+                        // LOAD RED
+                        list.add(new VarInsnNode(ALOAD, 23));
+                        list.add(new MethodInsnNode(
+                                INVOKEVIRTUAL,
+                                "me/dmillerw/upsidedown/asm/event/UpdateLightmapEvent",
+                                "getRed",
+                                "()I",
                                 false
                         ));
                         list.add(new VarInsnNode(ISTORE, 20));
 
-                        /* GREEN */
-//                        list.add(new FieldInsnNode(
-//                                GETSTATIC,
-//                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor",
-//                                "GREEN",
-//                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor"
-//                        ));
-                        list.add(new InsnNode(ICONST_1));
-                        list.add(new VarInsnNode(ILOAD, 5));
-                        list.add(new VarInsnNode(ILOAD, 21));
+                        // LOAD GREEN
+                        list.add(new VarInsnNode(ALOAD, 23));
                         list.add(new MethodInsnNode(
-                                INVOKESTATIC,
-                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler",
-                                "modifyLightmap",
-//                                "(Lme/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor;II)I",
-                                "(III)I",
+                                INVOKEVIRTUAL,
+                                "me/dmillerw/upsidedown/asm/event/UpdateLightmapEvent",
+                                "getGreen",
+                                "()I",
                                 false
                         ));
                         list.add(new VarInsnNode(ISTORE, 21));
 
-                        /* BLUE */
-//                        list.add(new FieldInsnNode(
-//                                GETSTATIC,
-//                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor",
-//                                "BLUE",
-//                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor"
-//                        ));
-                        list.add(new InsnNode(ICONST_2));
-                        list.add(new VarInsnNode(ILOAD, 5));
-                        list.add(new VarInsnNode(ILOAD, 22));
+                        // LOAD BLUE
+                        list.add(new VarInsnNode(ALOAD, 23));
                         list.add(new MethodInsnNode(
-                                INVOKESTATIC,
-                                "me/dmillerw/upsidedown/asm/redirect/StaticMethodHandler",
-                                "modifyLightmap",
-//                                "(Lme/dmillerw/upsidedown/asm/redirect/StaticMethodHandler$LightmapColor;II)I",
-                                "(III)I",
+                                INVOKEVIRTUAL,
+                                "me/dmillerw/upsidedown/asm/event/UpdateLightmapEvent",
+                                "getBlue",
+                                "()I",
                                 false
                         ));
                         list.add(new VarInsnNode(ISTORE, 22));
 
-                        updateLightmap.instructions.insert(iin, list);
+                        updateLightmap.instructions.insert(node, list);
                         insertedHook = true;
                     }
                 }

@@ -51,6 +51,7 @@ public class ParticleSpeck extends Particle {
         super.onUpdate();
 
         if (!ClientProxy.inUpsideDown) {
+            ParticleSpeck.count--;
             setExpired();
             return;
         }
