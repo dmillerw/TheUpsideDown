@@ -4,7 +4,9 @@ import me.dmillerw.upsidedown.lib.ModInfo;
 import me.dmillerw.upsidedown.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -17,6 +19,7 @@ import net.minecraft.world.World;
 public class ParticleSpeck extends Particle {
 
     private static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/particles/speck.png");
+    private static final ResourceLocation DEFAULT_PARTICLE_TEXTURES = new ResourceLocation("textures/particle/particles.png");
 
     public static int count = 0;
 
@@ -69,13 +72,9 @@ public class ParticleSpeck extends Particle {
     }
 
     @Override
-    public int getBrightnessForRender(float partialTicks) {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
     public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        Minecraft.getMinecraft().renderEngine.bindTexture(PARTICLE_TEXTURE);
+        final Minecraft mc = Minecraft.getMinecraft();
+        mc.renderEngine.bindTexture(PARTICLE_TEXTURE);
 
         float f = (float) this.type * 0.0625F;
         float f1 = f + 0.0625F;
@@ -105,9 +104,17 @@ public class ParticleSpeck extends Particle {
             }
         }
 
+        mc.entityRenderer.disableLightmap();
+
         worldRendererIn.pos((double) f5 + avec3d[0].xCoord, (double) f6 + avec3d[0].yCoord, (double) f7 + avec3d[0].zCoord).tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         worldRendererIn.pos((double) f5 + avec3d[1].xCoord, (double) f6 + avec3d[1].yCoord, (double) f7 + avec3d[1].zCoord).tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         worldRendererIn.pos((double) f5 + avec3d[2].xCoord, (double) f6 + avec3d[2].yCoord, (double) f7 + avec3d[2].zCoord).tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
         worldRendererIn.pos((double) f5 + avec3d[3].xCoord, (double) f6 + avec3d[3].yCoord, (double) f7 + avec3d[3].zCoord).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+
+        Tessellator.getInstance().draw();
+        mc.entityRenderer.enableLightmap();
+        worldRendererIn.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+
+        mc.renderEngine.bindTexture(DEFAULT_PARTICLE_TEXTURES);
     }
 }
