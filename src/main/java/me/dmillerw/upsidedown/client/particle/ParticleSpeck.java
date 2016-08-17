@@ -76,40 +76,45 @@ public class ParticleSpeck extends Particle {
         final Minecraft mc = Minecraft.getMinecraft();
         mc.renderEngine.bindTexture(PARTICLE_TEXTURE);
 
-        float f = (float) this.type * 0.0625F;
-        float f1 = f + 0.0625F;
-        float f2 = 0F;
-        float f3 = f2 + 0.0625F;
+        float uMin = (float) this.type * 0.0625F;
+        float uMax = uMin + 0.0625F;
+        float vMin = 0F;
+        float vMax = vMin + 0.0625F;
 
-        float f4 = 0.1F * this.particleScale;
+        float scale = 0.1F * this.particleScale;
 
-        float f5 = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX);
-        float f6 = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY);
-        float f7 = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ);
-        int i = this.getBrightnessForRender(partialTicks);
-        int j = i >> 16 & 65535;
-        int k = i & 65535;
-        Vec3d[] avec3d = new Vec3d[]{new Vec3d((double) (-rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (-rotationYZ * f4 - rotationXZ * f4)), new Vec3d((double) (-rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (-rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 + rotationXY * f4), (double) (rotationZ * f4), (double) (rotationYZ * f4 + rotationXZ * f4)), new Vec3d((double) (rotationX * f4 - rotationXY * f4), (double) (-rotationZ * f4), (double) (rotationYZ * f4 - rotationXZ * f4))};
+        float x = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - interpPosX);
+        float y = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - interpPosY);
+        float z = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - interpPosZ);
+
+        int brightness = this.getBrightnessForRender(partialTicks);
+
+        int lightU = brightness >> 16 & 65535;
+        int lightV = brightness & 65535;
+
+        Vec3d[] vector = new Vec3d[]{new Vec3d((double) (-rotationX * scale - rotationXY * scale), (double) (-rotationZ * scale), (double) (-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double) (-rotationX * scale + rotationXY * scale), (double) (rotationZ * scale), (double) (-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double) (rotationX * scale + rotationXY * scale), (double) (rotationZ * scale), (double) (rotationYZ * scale + rotationXZ * scale)), new Vec3d((double) (rotationX * scale - rotationXY * scale), (double) (-rotationZ * scale), (double) (rotationYZ * scale - rotationXZ * scale))};
 
         if (this.field_190014_F != 0.0F) {
             float f8 = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
             float f9 = MathHelper.cos(f8 * 0.5F);
-            float f10 = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.xCoord;
-            float f11 = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.yCoord;
-            float f12 = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.zCoord;
-            Vec3d vec3d = new Vec3d((double) f10, (double) f11, (double) f12);
+
+            float bx = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.xCoord;
+            float by = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.yCoord;
+            float bz = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.zCoord;
+
+            Vec3d billboardVec = new Vec3d((double) bx, (double) by, (double) bz);
 
             for (int l = 0; l < 4; ++l) {
-                avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double) (f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double) (2.0F * f9)));
+                vector[l] = billboardVec.scale(2.0D * vector[l].dotProduct(billboardVec)).add(vector[l].scale((double) (f9 * f9) - billboardVec.dotProduct(billboardVec))).add(billboardVec.crossProduct(vector[l]).scale((double) (2.0F * f9)));
             }
         }
 
         mc.entityRenderer.disableLightmap();
 
-        worldRendererIn.pos((double) f5 + avec3d[0].xCoord, (double) f6 + avec3d[0].yCoord, (double) f7 + avec3d[0].zCoord).tex((double) f1, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        worldRendererIn.pos((double) f5 + avec3d[1].xCoord, (double) f6 + avec3d[1].yCoord, (double) f7 + avec3d[1].zCoord).tex((double) f1, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        worldRendererIn.pos((double) f5 + avec3d[2].xCoord, (double) f6 + avec3d[2].yCoord, (double) f7 + avec3d[2].zCoord).tex((double) f, (double) f2).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-        worldRendererIn.pos((double) f5 + avec3d[3].xCoord, (double) f6 + avec3d[3].yCoord, (double) f7 + avec3d[3].zCoord).tex((double) f, (double) f3).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+        worldRendererIn.pos((double) x + vector[0].xCoord, (double) y + vector[0].yCoord, (double) z + vector[0].zCoord).tex((double) uMax, (double) vMax).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
+        worldRendererIn.pos((double) x + vector[1].xCoord, (double) y + vector[1].yCoord, (double) z + vector[1].zCoord).tex((double) uMax, (double) vMin).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
+        worldRendererIn.pos((double) x + vector[2].xCoord, (double) y + vector[2].yCoord, (double) z + vector[2].zCoord).tex((double) uMin, (double) vMin).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
+        worldRendererIn.pos((double) x + vector[3].xCoord, (double) y + vector[3].yCoord, (double) z + vector[3].zCoord).tex((double) uMin, (double) vMax).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
 
         Tessellator.getInstance().draw();
         mc.entityRenderer.enableLightmap();
