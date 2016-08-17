@@ -1,5 +1,6 @@
 # The Upside Down
-* Improve debug command
+* Artificial weathering/wear to block textures
+* Generate worn varients of various models on runtime
+* * Replace block with worn model when in the upside down
 * Write actual Gradle script
-* Maybe debug GUI for coloring/atmospheric stuff because C is way better at than than I am
 * FEATURES! SPECIFICS! HOLY SHIT
