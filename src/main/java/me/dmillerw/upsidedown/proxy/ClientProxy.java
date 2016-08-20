@@ -1,13 +1,13 @@
 package me.dmillerw.upsidedown.proxy;
 
 import com.google.common.collect.Sets;
-import me.dmillerw.upsidedown.client.LightmapReloader;
 import me.dmillerw.upsidedown.client.event.RenderEventHandler;
 import me.dmillerw.upsidedown.client.state.AtmosphericState;
+import me.dmillerw.upsidedown.lib.ModInfo;
 import me.dmillerw.upsidedown.lib.SkyRenderers;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -33,8 +33,6 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
-        ((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(new LightmapReloader());
-
         MinecraftForge.EVENT_BUS.register(new RenderEventHandler());
     }
 
@@ -54,10 +52,10 @@ public class ClientProxy extends CommonProxy {
 
         if (state) {
             player.worldObj.provider.setCloudRenderer(SkyRenderers.EMPTY);
-//            Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().entityRenderer.loadShader(new ResourceLocation(ModInfo.ID, "shaders/post/desaturate.json")));
+            Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().entityRenderer.loadShader(new ResourceLocation(ModInfo.ID, "shaders/post/desaturate.json")));
         } else {
             player.worldObj.provider.setCloudRenderer(null);
-//            Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().entityRenderer.stopUseShader());
+            Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().entityRenderer.stopUseShader());
         }
     }
 }

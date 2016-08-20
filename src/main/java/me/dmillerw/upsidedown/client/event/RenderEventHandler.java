@@ -1,5 +1,6 @@
 package me.dmillerw.upsidedown.client.event;
 
+import me.dmillerw.upsidedown.asm.event.SunBrightnessEvent;
 import me.dmillerw.upsidedown.asm.event.UpdateLightmapEvent;
 import me.dmillerw.upsidedown.client.particle.ParticleSpeck;
 import me.dmillerw.upsidedown.proxy.ClientProxy;
@@ -17,16 +18,19 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
  */
 public class RenderEventHandler {
 
-    public static boolean lightmapOverride = false;
-    public static int[] lightmap = new int[16 * 16];
+    @SubscribeEvent
+    public void sunBrightness(SunBrightnessEvent event) {
+        float brightness = event.getBrightness();
+        if (ClientProxy.inUpsideDown)
+            event.setBrightness(brightness * ClientProxy.atmosphericState.lightingIntensity);
+    }
 
     @SubscribeEvent
     public void updateLightmap(UpdateLightmapEvent event) {
-        if (ClientProxy.inUpsideDown && lightmapOverride) {
-            int color = lightmap[event.getArrayPosition()];
-            event.setRed(0xFF & (color >> 16));
-            event.setGreen(0xFF & (color >> 8));
-            event.setBlue(0xFF & (color >> 0));
+        if (ClientProxy.inUpsideDown) {
+            event.setRed((int)((float)event.getRed() * ClientProxy.atmosphericState.lightingRed));
+            event.setGreen((int)((float)event.getGreen() * ClientProxy.atmosphericState.lightingGreen));
+            event.setBlue((int)((float)event.getBlue() * ClientProxy.atmosphericState.lightingBlue));
         }
     }
 
@@ -53,7 +57,7 @@ public class RenderEventHandler {
     private BlockPos.MutableBlockPos tempPos = new BlockPos.MutableBlockPos();
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onRenderTick(TickEvent.RenderTickEvent event) {
         if (event.phase != TickEvent.Phase.START)
             return;
 
