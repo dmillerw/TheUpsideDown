@@ -27,6 +27,10 @@ version = "1.0"
 group= "me.dmillerw.upsidedown" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TheUpsideDown"
 
+build_number = System.getenv("BUILD_NUMBER") as Integer ?: 0
+if (build_number != 0)
+    version = version + ".B" + build_number
+
 minecraft {
     version = "1.10.2-12.18.1.2014"
     runDir = "run"
