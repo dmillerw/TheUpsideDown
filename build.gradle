@@ -28,7 +28,7 @@ group= "me.dmillerw.upsidedown" // http://maven.apache.org/guides/mini/guide-nam
 archivesBaseName = "TheUpsideDown"
 
 if (System.getenv("BUILD_NUMBER")) {
-    version = version + ".B" + System.getenv("BUILD_NUMBER")
+    version = "-SNAPSHOT-" + System.getenv("BUILD_NUMBER") + "-" + version
 }
 
 minecraft {
