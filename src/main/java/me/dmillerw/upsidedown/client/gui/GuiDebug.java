@@ -232,7 +232,7 @@ public class GuiDebug extends GuiScreen implements GuiPageButtonList.GuiResponde
     protected int guiLeft;
     protected int guiTop;
 
-    private DebugType mode;
+    private DebugType mode = null;
 
     private void switchMode(DebugType mode) {
         this.mode = mode;
@@ -282,7 +282,11 @@ public class GuiDebug extends GuiScreen implements GuiPageButtonList.GuiResponde
         this.buttonList.add(new GuiUnicodeGlyphButton(BUTTON_PREVIOUS_MODE, guiLeft + 5, guiTop + 5, 20, 20, "", "\u25C0", 1F));
         this.buttonList.add(new GuiUnicodeGlyphButton(BUTTON_NEXT_MODE, guiLeft + xSize - 25, guiTop + 5, 20, 20, "", "\u25B6", 1F));
 
-        switchMode(DebugType.FOG);
+        if (mode == null) {
+            switchMode(DebugType.FOG);
+        } else {
+            switchMode(mode);
+        }
     }
 
     @Override
