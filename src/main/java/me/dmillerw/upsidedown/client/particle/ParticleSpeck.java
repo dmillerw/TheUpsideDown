@@ -22,6 +22,7 @@ public class ParticleSpeck extends Particle {
     private static final ResourceLocation DEFAULT_PARTICLE_TEXTURES = new ResourceLocation("textures/particle/particles.png");
 
     public static int count = 0;
+    public static boolean killAll = false;
 
     private float ageMid;
     private int type;
@@ -39,9 +40,11 @@ public class ParticleSpeck extends Particle {
         this.particleGreen = 1.0F;
         this.particleBlue = 1.0F;
         this.setParticleTextureIndex(32);
-        this.setSize(0.01F, 0.01F);
+        this.setSize(
+                ClientProxy.atmosphericState.particleSize,
+                ClientProxy.atmosphericState.particleSize);
 
-        this.particleMaxAge = (int) (32.0D / (Math.random() * 0.8D + 0.2D));
+        this.particleMaxAge = (int) (ClientProxy.atmosphericState.particleMaxLifespan / (Math.random() * 0.8D + 0.2D));
 
         this.ageMid = particleMaxAge / 2F;
         this.particleAlpha = 0F;
@@ -54,6 +57,12 @@ public class ParticleSpeck extends Particle {
         super.onUpdate();
 
         if (!ClientProxy.inUpsideDown) {
+            ParticleSpeck.count--;
+            setExpired();
+            return;
+        }
+
+        if (ParticleSpeck.killAll) {
             ParticleSpeck.count--;
             setExpired();
             return;

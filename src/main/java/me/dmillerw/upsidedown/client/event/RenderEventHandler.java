@@ -45,9 +45,11 @@ public class RenderEventHandler {
 
     @SubscribeEvent
     public void fogColor(EntityViewRenderEvent.FogColors event) {
-        event.setRed(ClientProxy.atmosphericState.fogRed);
-        event.setGreen(ClientProxy.atmosphericState.fogGreen);
-        event.setBlue(ClientProxy.atmosphericState.fogBlue);
+        if (ClientProxy.inUpsideDown) {
+            event.setRed(ClientProxy.atmosphericState.fogRed);
+            event.setGreen(ClientProxy.atmosphericState.fogGreen);
+            event.setBlue(ClientProxy.atmosphericState.fogBlue);
+        }
 
 //        event.setRed(0.71F);
 //        event.setGreen(0.71F);
@@ -64,17 +66,26 @@ public class RenderEventHandler {
         if (!ClientProxy.inUpsideDown)
             return;
 
+        if (ParticleSpeck.killAll) {
+            if (ParticleSpeck.count > 0)
+                return;
+
+            ParticleSpeck.killAll = false;
+        }
+
         Minecraft mc = Minecraft.getMinecraft();
         World world = mc.theWorld;
         EntityPlayer player = mc.thePlayer;
+
         if (world != null) {
-            final int MAX_PARTICLES = 500;
+            final int MAX_DISTANCE = ClientProxy.atmosphericState.particleMaxDistance;
+            final int MAX_PARTICLES = ClientProxy.atmosphericState.particleMaxAmount;
 
             if (ParticleSpeck.count < MAX_PARTICLES) {
-                for (int i=0; i<100; i++) {
-                    int x = (int)player.posX + (world.rand.nextBoolean() ? world.rand.nextInt(8) : -world.rand.nextInt(8));
+                for (int i=0; i<ClientProxy.atmosphericState.particleSpawnPerTick; i++) {
+                    int x = (int)player.posX + (world.rand.nextBoolean() ? world.rand.nextInt(MAX_DISTANCE) : -world.rand.nextInt(MAX_DISTANCE));
                     int y = (int)player.posY + (world.rand.nextBoolean() ? world.rand.nextInt(4) : -world.rand.nextInt(4));
-                    int z = (int)player.posZ + (world.rand.nextBoolean() ? world.rand.nextInt(8) : -world.rand.nextInt(8));
+                    int z = (int)player.posZ + (world.rand.nextBoolean() ? world.rand.nextInt(MAX_DISTANCE) : -world.rand.nextInt(MAX_DISTANCE));
 
                     if (!world.isAirBlock(tempPos.setPos(x, y, z)))
                         continue;

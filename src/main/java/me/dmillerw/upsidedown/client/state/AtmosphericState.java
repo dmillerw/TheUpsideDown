@@ -16,4 +16,10 @@ public class AtmosphericState {
     public float lightingBlue = 1F;
 
     public float lightingIntensity = 1F;
+
+    public float particleSize = 0.01F;
+    public int particleMaxLifespan = 32;
+    public int particleMaxDistance = 8;
+    public int particleMaxAmount = 500;
+    public int particleSpawnPerTick = 100;
 }
