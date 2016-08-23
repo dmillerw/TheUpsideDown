@@ -9,7 +9,9 @@ import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
+import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -145,7 +147,7 @@ public class GuiDebug extends GuiScreen implements GuiPageButtonList.GuiResponde
                             gui.guiTop + 25,
                             "PARTICLE_SIZE",
                             0F,
-                            1F,
+                            10F,
                             ClientProxy.atmosphericState.particleSize,
                             FLOAT
                     ));
@@ -306,12 +308,22 @@ public class GuiDebug extends GuiScreen implements GuiPageButtonList.GuiResponde
 
         fontRendererObj.drawString(header, guiLeft + (xSize / 2) - (size / 2), guiTop + 8, fontColor);
 
+        int mouseWheelDelta = MathHelper.clamp_int(Mouse.getDWheel(), -1, 1);
+
         for (GuiButton button : buttonList) {
             if (button instanceof GuiSlider && button.isMouseOver()) {
                 String text = getText(button.id);
 
-                if (!text.isEmpty())
+                if (!text.isEmpty()) {
                     drawHoveringText(Arrays.asList(text), mouseX, mouseY);
+                }
+
+                if (mouseWheelDelta != 0) {
+                    float position = ((GuiSlider) button).getSliderPosition() + (0.01F * mouseWheelDelta);
+                    ((GuiSlider) button).setSliderPosition(MathHelper.clamp_float(position, 0F, 1F));
+
+                    break;
+                }
             }
         }
     }

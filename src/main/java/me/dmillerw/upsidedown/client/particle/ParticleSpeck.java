@@ -39,7 +39,10 @@ public class ParticleSpeck extends Particle {
         this.particleRed = 1.0F;
         this.particleGreen = 1.0F;
         this.particleBlue = 1.0F;
+
         this.setParticleTextureIndex(32);
+
+        this.particleScale = ClientProxy.atmosphericState.particleSize;
         this.setSize(
                 ClientProxy.atmosphericState.particleSize,
                 ClientProxy.atmosphericState.particleSize);
