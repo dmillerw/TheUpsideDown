@@ -19,8 +19,6 @@ public class CommonProxy implements IProxy {
     public void preInit(FMLPreInitializationEvent event) {
         PacketHandler.initialize();
         NetworkRegistry.INSTANCE.registerGuiHandler(TheUpsideDown.INSTANCE, new GuiHandler());
-
-        ModItems.initialize();
     }
 
     @Override

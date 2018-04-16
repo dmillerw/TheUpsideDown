@@ -21,14 +21,11 @@ public class ItemDebug extends Item {
 
         setMaxStackSize(1);
 
-        setRegistryName("debug");
         setUnlocalizedName("debug");
-
-        GameRegistry.register(this);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         if (!worldIn.isRemote) {
             if (playerIn.isSneaking()) {
                 StateHelper.swapState(playerIn);
@@ -38,6 +35,7 @@ public class ItemDebug extends Item {
                 GuiHandler.GuiType.DEBUG.open(playerIn);
             }
         }
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
     }
 }

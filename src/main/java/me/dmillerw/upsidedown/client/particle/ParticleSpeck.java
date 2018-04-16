@@ -4,8 +4,8 @@ import me.dmillerw.upsidedown.lib.ModInfo;
 import me.dmillerw.upsidedown.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -27,8 +27,8 @@ public class ParticleSpeck extends Particle {
     private float ageMid;
     private int type;
 
-    public ParticleSpeck(World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed) {
-        super(world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed);
+    public ParticleSpeck(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        super(world, x, y, z, xSpeed, ySpeed, zSpeed);
 
         ParticleSpeck.count++;
 
@@ -83,8 +83,10 @@ public class ParticleSpeck extends Particle {
         }
     }
 
+    
+    
     @Override
-    public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+    public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
         final Minecraft mc = Minecraft.getMinecraft();
         mc.renderEngine.bindTexture(PARTICLE_TEXTURE);
 
@@ -106,13 +108,13 @@ public class ParticleSpeck extends Particle {
 
         Vec3d[] vector = new Vec3d[]{new Vec3d((double) (-rotationX * scale - rotationXY * scale), (double) (-rotationZ * scale), (double) (-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double) (-rotationX * scale + rotationXY * scale), (double) (rotationZ * scale), (double) (-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double) (rotationX * scale + rotationXY * scale), (double) (rotationZ * scale), (double) (rotationYZ * scale + rotationXZ * scale)), new Vec3d((double) (rotationX * scale - rotationXY * scale), (double) (-rotationZ * scale), (double) (rotationYZ * scale - rotationXZ * scale))};
 
-        if (this.field_190014_F != 0.0F) {
-            float f8 = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
+        if (this.particleAngle != 0.0F) {
+            float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
             float f9 = MathHelper.cos(f8 * 0.5F);
 
-            float bx = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.xCoord;
-            float by = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.yCoord;
-            float bz = MathHelper.sin(f8 * 0.5F) * (float) field_190016_K.zCoord;
+            float bx = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.x;
+            float by = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.y;
+            float bz = MathHelper.sin(f8 * 0.5F) * (float) cameraViewDir.z;
 
             Vec3d billboardVec = new Vec3d((double) bx, (double) by, (double) bz);
 
@@ -123,10 +125,10 @@ public class ParticleSpeck extends Particle {
 
         mc.entityRenderer.disableLightmap();
 
-        worldRendererIn.pos((double) x + vector[0].xCoord, (double) y + vector[0].yCoord, (double) z + vector[0].zCoord).tex((double) uMax, (double) vMax).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
-        worldRendererIn.pos((double) x + vector[1].xCoord, (double) y + vector[1].yCoord, (double) z + vector[1].zCoord).tex((double) uMax, (double) vMin).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
-        worldRendererIn.pos((double) x + vector[2].xCoord, (double) y + vector[2].yCoord, (double) z + vector[2].zCoord).tex((double) uMin, (double) vMin).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
-        worldRendererIn.pos((double) x + vector[3].xCoord, (double) y + vector[3].yCoord, (double) z + vector[3].zCoord).tex((double) uMin, (double) vMax).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
+        worldRendererIn.pos((double) x + vector[0].x, (double) y + vector[0].y, (double) z + vector[0].z).tex((double) uMax, (double) vMax).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
+        worldRendererIn.pos((double) x + vector[1].x, (double) y + vector[1].y, (double) z + vector[1].z).tex((double) uMax, (double) vMin).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
+        worldRendererIn.pos((double) x + vector[2].x, (double) y + vector[2].y, (double) z + vector[2].z).tex((double) uMin, (double) vMin).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
+        worldRendererIn.pos((double) x + vector[3].x, (double) y + vector[3].y, (double) z + vector[3].z).tex((double) uMin, (double) vMax).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightU, lightV).endVertex();
 
         Tessellator.getInstance().draw();
         mc.entityRenderer.enableLightmap();

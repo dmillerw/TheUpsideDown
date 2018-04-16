@@ -124,7 +124,7 @@ public class LogHelper {
         all(MOD_MARKER, message, throwable);
     }
 
-    // DEBUG
+    // debug
     public static void debug(Marker marker, Message message) {
         log(DEBUG, marker, message);
     }

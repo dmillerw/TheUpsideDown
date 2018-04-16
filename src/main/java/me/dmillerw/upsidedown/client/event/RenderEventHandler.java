@@ -74,8 +74,8 @@ public class RenderEventHandler {
         }
 
         Minecraft mc = Minecraft.getMinecraft();
-        World world = mc.theWorld;
-        EntityPlayer player = mc.thePlayer;
+        World world = mc.world;
+        EntityPlayer player = mc.player;
 
         if (world != null) {
             final int MAX_DISTANCE = ClientProxy.atmosphericState.particleMaxDistance;

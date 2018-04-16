@@ -47,7 +47,7 @@ public class StateHelper {
         Set<UUID> set = Sets.newHashSet();
 
         MinecraftServer server = FMLServerHandler.instance().getServer();
-        for (EntityPlayerMP player : server.getPlayerList().getPlayerList()) {
+        for (EntityPlayerMP player : server.getPlayerList().getPlayers()) {
             if (getState(player) == state) {
                 set.add(player.getGameProfile().getId());
             }

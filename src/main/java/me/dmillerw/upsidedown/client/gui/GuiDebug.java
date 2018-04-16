@@ -304,11 +304,11 @@ public class GuiDebug extends GuiScreen implements GuiPageButtonList.GuiResponde
 
         final int fontColor = 0x0000000;
         final String header = mode.name();
-        final int size = fontRendererObj.getStringWidth(header);
+        final int size = fontRenderer.getStringWidth(header);
 
-        fontRendererObj.drawString(header, guiLeft + (xSize / 2) - (size / 2), guiTop + 8, fontColor);
+        fontRenderer.drawString(header, guiLeft + (xSize / 2) - (size / 2), guiTop + 8, fontColor);
 
-        int mouseWheelDelta = MathHelper.clamp_int(Mouse.getDWheel(), -1, 1);
+        int mouseWheelDelta = MathHelper.clamp(Mouse.getDWheel(), -1, 1);
 
         for (GuiButton button : buttonList) {
             if (button instanceof GuiSlider && button.isMouseOver()) {
@@ -320,7 +320,7 @@ public class GuiDebug extends GuiScreen implements GuiPageButtonList.GuiResponde
 
                 if (mouseWheelDelta != 0) {
                     float position = ((GuiSlider) button).getSliderPosition() + (0.01F * mouseWheelDelta);
-                    ((GuiSlider) button).setSliderPosition(MathHelper.clamp_float(position, 0F, 1F));
+                    ((GuiSlider) button).setSliderPosition(MathHelper.clamp(position, 0F, 1F));
 
                     break;
                 }

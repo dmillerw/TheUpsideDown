@@ -51,10 +51,10 @@ public class ClientProxy extends CommonProxy {
         super.onStateChanged(player, state);
 
         if (state) {
-            player.worldObj.provider.setCloudRenderer(SkyRenderers.EMPTY);
+            player.world.provider.setCloudRenderer(SkyRenderers.EMPTY);
             Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().entityRenderer.loadShader(new ResourceLocation(ModInfo.ID, "shaders/post/desaturate.json")));
         } else {
-            player.worldObj.provider.setCloudRenderer(null);
+            player.world.provider.setCloudRenderer(null);
             Minecraft.getMinecraft().addScheduledTask(() -> Minecraft.getMinecraft().entityRenderer.stopUseShader());
         }
     }

@@ -16,7 +16,7 @@ public class GuiHandler implements IGuiHandler {
         DEBUG;
 
         public void open(EntityPlayer player) {
-            player.openGui(TheUpsideDown.INSTANCE, this.ordinal(), player.worldObj, 0, 0, 0);
+            player.openGui(TheUpsideDown.INSTANCE, this.ordinal(), player.world, 0, 0, 0);
         }
 
         public void open(EntityPlayer player, World world, int x, int y, int z) {

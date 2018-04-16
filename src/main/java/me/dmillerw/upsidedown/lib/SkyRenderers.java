@@ -2,10 +2,10 @@ package me.dmillerw.upsidedown.lib;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IRenderHandler;
@@ -27,7 +27,7 @@ public class SkyRenderers {
             GlStateManager.depthMask(false);
             Minecraft.getMinecraft().renderEngine.bindTexture(END_SKY_TEXTURES);
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            BufferBuilder vertexbuffer = tessellator.getBuffer();
 
             for (int i = 0; i < 6; ++i)
             {

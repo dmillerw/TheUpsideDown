@@ -47,7 +47,7 @@ public class C01StateUpdate implements IMessage {
             ClientProxy.inUpsideDown = message.inUpsideDown;
             ClientProxy.playersSharingState = message.otherPlayers;
 
-            TheUpsideDown.PROXY.onStateChanged(Minecraft.getMinecraft().thePlayer, message.inUpsideDown);
+            TheUpsideDown.PROXY.onStateChanged(Minecraft.getMinecraft().player, message.inUpsideDown);
 
             return null;
         }
